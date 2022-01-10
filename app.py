@@ -6,7 +6,6 @@ import scraping
 # using Flask to: 1) render a template, 2) redirect to another url, and 3) create a URL
 app = Flask(__name__)
 
-# connect to Mongo using PyMongo
 app.config["MONGO_URI"] = "mongodb://localhost:27017/mars_app"
 mongo = PyMongo(app)
 
@@ -27,9 +26,10 @@ def index():
 def scrape():
    mars = mongo.db.mars
    mars_data = scraping.scrape_all()
+   #mars.update_one({}, mars_data, upsert=True)
    mars.update_one({}, {"$set" : mars_data}, upsert=True)
    return redirect('/', code=302)
 
 # run app.py
 if __name__ == "__main__":
-       app.run()
+   app.run()
